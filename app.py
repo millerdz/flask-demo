@@ -1,9 +1,8 @@
-from flask import Flask, render_template
+from flask import Flask, redirect, render_template, request
 import os
 import socket
 
 app = Flask(__name__)
-secrets = []
 
 @app.route('/')
 def hello_world():
@@ -11,6 +10,7 @@ def hello_world():
     id = socket.gethostname()
 
     # get the secrets
+    secrets = []
     try:
         for entry in os.scandir('/run/secrets'):
             if entry.is_file():
@@ -20,6 +20,17 @@ def hello_world():
         pass
 
     return render_template('index.html', id=id, secrets=secrets)
+
+@app.route('/kill')
+def shutdown():
+    shutdown_server()
+    return redirect('/')
+
+def shutdown_server():
+    func = request.environ.get('werkzeug.server.shutdown')
+    if func is None:
+        raise RuntimeError('Not running with the Werkzeug Server')
+    func()
 
 if __name__ == '__main__':
     app.run(debug=True,host='0.0.0.0')
