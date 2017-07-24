@@ -404,6 +404,12 @@
 							$main._show(location.hash.substr(1), true);
 						});
 
+					$('#disable').click(function(e) {
+						$('#healthcheckfail').show()
+						$.post('/disable')
+					});
+
+
 	});
 
 })(jQuery);
