@@ -12,4 +12,6 @@ HEALTHCHECK --interval=6s --timeout=2s CMD curl --fail http://localhost:5000/hea
 
 ENTRYPOINT ["python"]
 
+EXPOSE 5000
+
 CMD ["app.py"]
